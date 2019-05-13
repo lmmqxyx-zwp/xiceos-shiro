@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <mvc:annotation-driven />
+
+    <!-- 创建shiro filter的对象 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 登录页面的URL -->
+        <property name="loginUrl" value="login.html"/>
+        <!-- 未认证的跳转页面 -->
+        <property name="unauthorizedUrl" value="403.html"/>
+        <!-- 过滤器链 -->
+        <!-- 有顺序 -->
+        <!-- authc：经过认证之后才能访问相应的路径 -->
+        <!-- anon：不需要任何的验证就能访问  -->
+        <!-- 从上向下开始匹配 -->
+        <!-- 匹配到了之后就会返回 -->
+        <property name="filterChainDefinitions">
+            <!-- 系统中内置了许多filter  -->
+            <value>
+                /login.html = anon
+                /doLogin = anon
+                /* = authc
+            </value>
+        </property>
+    </bean>
+
+    <!-- 创建shiro需要的对象 -->
+
+    <!-- 创建SecurityManager对象 -->
+    <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+        <property name="realm" ref="customRealm"/>
+    </bean>
+
+    <!-- Relam -->
+    <bean id="customRealm" class="top.by.xs.relam.CustomRealm">
+        <!-- 设置加密对象 -->
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <!-- 加密管理器对象 -->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!-- 设置加密的算法 -->
+        <property name="hashAlgorithmName" value="md5"/>
+        <!-- 设置加密次数 -->
+        <property name="hashIterations" value="1"/>
+    </bean>
+
+</beans>
