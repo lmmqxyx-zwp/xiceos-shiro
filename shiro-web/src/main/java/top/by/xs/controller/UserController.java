@@ -13,7 +13,9 @@ import top.by.xs.vo.User;
 @Controller
 public class UserController {
 
-    @RequestMapping(value = "doLogin", method = RequestMethod.POST)
+    // produces = "application/json;charset=utf-8
+    // 用来解决 return 的数据中中文乱码问题
+    @RequestMapping(value = "doLogin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String doLogin(User user) {
 
@@ -24,9 +26,10 @@ public class UserController {
             subject.login(token);
         } catch (Exception e) {
             e.printStackTrace();
+            return e.getMessage();
         }
 
-        return "login success";
+        return "login success [登录认证成]";
     }
 
 }

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <mvc:annotation-driven />
 
     <!-- 创建shiro filter的对象 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -22,6 +18,8 @@
         <!-- 匹配到了之后就会返回 -->
         <property name="filterChainDefinitions">
             <!-- 系统中内置了许多filter  -->
+            <!-- 登录页面的url无需认证  -->
+            <!-- 登录的请求无需认证 -->
             <value>
                 /login.html = anon
                 /doLogin = anon
@@ -33,7 +31,8 @@
     <!-- 创建shiro需要的对象 -->
 
     <!-- 创建SecurityManager对象 -->
-    <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+    <!-- 注意使用SecurityManager是DefaultWebSecurityManager，而不是DefaultSecurityManager -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="customRealm"/>
     </bean>
 
