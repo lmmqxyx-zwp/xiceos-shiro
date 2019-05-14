@@ -10,11 +10,12 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.util.CollectionUtils;
+import top.by.xs.dao.UserDao;
+import top.by.xs.vo.User;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * 自定义Realm的实现
@@ -23,19 +24,22 @@ import java.util.Set;
  */
 public class CustomRealm extends AuthorizingRealm {
 
+    @Resource
+    private UserDao userDao;
+
     // 盐
     public static final String SLAT = "md5";
 
-    Map<String, String> userMap = new HashMap<String, String>();
-
-    {
-        // userMap.put("mark", "123456");
-        // 123456 => MD5:e10adc3949ba59abbe56e057f20f883e
-        // userMap.put("mark", "e10adc3949ba59abbe56e057f20f883e");
-        // 123456 => slat MD5:ae8176b4caaf5f39283361ae3eacc71f
-        userMap.put("mark", "ae8176b4caaf5f39283361ae3eacc71f");
-        super.setName("customRealm");
-    }
+//    Map<String, String> userMap = new HashMap<String, String>();
+//
+//    {
+//        // userMap.put("mark", "123456");
+//        // 123456 => MD5:e10adc3949ba59abbe56e057f20f883e
+//        // userMap.put("mark", "e10adc3949ba59abbe56e057f20f883e");
+//        // 123456 => slat MD5:ae8176b4caaf5f39283361ae3eacc71f
+//        userMap.put("mark", "ae8176b4caaf5f39283361ae3eacc71f");
+//        super.setName("customRealm");
+//    }
 
     /**
      * 授权
@@ -83,7 +87,7 @@ public class CustomRealm extends AuthorizingRealm {
         }
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                "mark", password, "customRealm"
+                userName, password, "customRealm"
         );
 
         // 加盐之后的操作
@@ -92,30 +96,43 @@ public class CustomRealm extends AuthorizingRealm {
         return authenticationInfo;
     }
 
-    // 模拟数据库的操作
+    /**
+     * 获取密码
+     *
+     * @param userName
+     * @return
+     */
     private String getPasswordByUserName(String userName) {
-        // 访问数据库
-        // 此处先不连接数据库，从mock map中取得对应的数据
-        return userMap.get(userName);
+        User user = userDao.getPasswordByUserName(userName);
+
+        if (user == null) {
+            return null;
+        }
+
+        return user.getPassword();
     }
 
-    // 模拟数据库的操作
+    /**
+     * 获取角色
+     *
+     * @param userName
+     * @return
+     */
     private Set<String> getRolesByUserName(String userName) {
-        Set<String> roles = new HashSet<String>();
-
-        roles.add("admin");
-        roles.add("user");
-
+        List<String> list = userDao.getRolesByUserName(userName);
+        Set<String> roles = new HashSet<String>(list);
         return roles;
     }
 
-    // 模拟数据库的操作
+    /**
+     * 获取权限
+     *
+     * @param userName
+     * @return
+     */
     private Set<String> getPermissionsByUserName(String userName) {
-        Set<String> permissions = new HashSet<String>();
-
-        permissions.add("user:delete");
-        permissions.add("admin:update");
-
+        List<String> list = userDao.getPermissionsByUserName(userName);
+        Set<String> permissions = new HashSet<String>(list);
         return permissions;
     }
 
