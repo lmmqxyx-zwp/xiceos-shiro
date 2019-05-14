@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="spring-db.xml"/>
     <context:component-scan base-package="top.by.xs"/>
@@ -29,14 +30,22 @@
                 /doLogin = anon
                 /testRole2 = roles["admin"]
                 /testRole3 = roles["admin", "user"]
+                /testRole4 = rolesOr["admin", "user", "manager"]
                 /testPerms = perms["user:delete"]
                 /* = authc
             </value>
         </property>
+        <property name="filters">
+            <util:map>
+                <entry key="rolesOr" value-ref="rolesOrFilter"/>
+            </util:map>
+        </property>
     </bean>
 
-    <!-- 创建shiro需要的对象 -->
+    <!-- 创建自定义的filter  -->
+    <bean id="rolesOrFilter" class="top.by.xs.filter.RolesOrFilter"></bean>
 
+    <!-- 创建shiro需要的对象 -->
     <!-- 创建SecurityManager对象 -->
     <!-- 注意使用SecurityManager是DefaultWebSecurityManager，而不是DefaultSecurityManager -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

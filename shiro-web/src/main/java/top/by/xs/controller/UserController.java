@@ -96,6 +96,13 @@ public class UserController {
         return "testPerms success";
     }
 
+    // 自定义shiro filter
+    @RequestMapping(value = "/testRole4", method = RequestMethod.GET)
+    @ResponseBody
+    public String testRole4() {
+        return "testRole4 success";
+    }
+
     // ==========================================================================
 
     // http://localhost:8080/checkRoles?username=mark&password=123456&roles=admin&roles=user
