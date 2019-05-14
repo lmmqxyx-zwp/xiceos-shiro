@@ -77,6 +77,25 @@ public class UserController {
         return "testRole1 success";
     }
 
+    // 内置过滤器的使用
+    @RequestMapping(value = "/testRole2", method = RequestMethod.GET)
+    @ResponseBody
+    public String testRole2() {
+        return "testRole2 success";
+    }
+
+    @RequestMapping(value = "/testRole3", method = RequestMethod.GET)
+    @ResponseBody
+    public String testRole3() {
+        return "testRole3 success";
+    }
+
+    @RequestMapping(value = "/testPerms", method = RequestMethod.GET)
+    @ResponseBody
+    public String testPerms() {
+        return "testPerms success";
+    }
+
     // ==========================================================================
 
     // http://localhost:8080/checkRoles?username=mark&password=123456&roles=admin&roles=user

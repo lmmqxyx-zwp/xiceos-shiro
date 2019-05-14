@@ -27,6 +27,9 @@
             <value>
                 /login.html = anon
                 /doLogin = anon
+                /testRole2 = roles["admin"]
+                /testRole3 = roles["admin", "user"]
+                /testPerms = perms["user:delete"]
                 /* = authc
             </value>
         </property>
