@@ -8,6 +8,8 @@
     <import resource="spring-db.xml"/>
     <context:component-scan base-package="top.by.xs"/>
 
+    <import resource="spring-redis.xml"/>
+
     <!-- 创建shiro filter的对象 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -50,6 +52,8 @@
     <!-- 注意使用SecurityManager是DefaultWebSecurityManager，而不是DefaultSecurityManager -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="customRealm"/>
+        <!-- shiro session manager需要配置到security manager中  -->
+        <property name="sessionManager" ref="defaultWebSessionManager"/>
     </bean>
 
     <!-- Relam -->
@@ -66,4 +70,17 @@
         <property name="hashIterations" value="1"/>
     </bean>
 
+    <!-- shiro会话管理  -->
+    <!--
+    <bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+    </bean>
+    -->
+
+    <!-- 使用自定义的session manager -->
+    <bean id="defaultWebSessionManager" class="top.by.xs.session.CustomSessionManager">
+        <property name="sessionDAO" ref="redisSessionDao"/>
+    </bean>
+
+    <bean id="redisSessionDao" class="top.by.xs.session.RedisSessionDao"/>
 </beans>
