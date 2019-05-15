@@ -19,7 +19,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
     private JedisUtil jedisUtil;
 
     // 前缀
-    private static final String SHIRO_SESSION_PREFIX = "shiro-web-session";
+    private static final String SHIRO_SESSION_PREFIX = "shiro-web-session:";
 
     private byte[] getKey(String key) {
         return (SHIRO_SESSION_PREFIX + key).getBytes();

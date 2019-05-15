@@ -54,6 +54,8 @@
         <property name="realm" ref="customRealm"/>
         <!-- shiro session manager需要配置到security manager中  -->
         <property name="sessionManager" ref="defaultWebSessionManager"/>
+        <!-- shiro cache manager -->
+        <property name="cacheManager" ref="redisCacheManager"/>
     </bean>
 
     <!-- Relam -->
@@ -83,4 +85,7 @@
     </bean>
 
     <bean id="redisSessionDao" class="top.by.xs.session.RedisSessionDao"/>
+
+    <!-- shiro cache-->
+    <bean id="redisCacheManager" class="top.by.xs.cache.RedisCacheManager"></bean>
 </beans>

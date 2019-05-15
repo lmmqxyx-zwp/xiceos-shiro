@@ -120,6 +120,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     private Set<String> getRolesByUserName(String userName) {
         List<String> list = userDao.getRolesByUserName(userName);
+        System.out.println("get db roles => " + list);
         Set<String> roles = new HashSet<String>(list);
         return roles;
     }
