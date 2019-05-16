@@ -127,6 +127,7 @@ public class UserController {
     private Subject login(User user) throws Exception {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        token.setRememberMe(user.isRememberMe());
         subject.login(token);
         return subject;
     }

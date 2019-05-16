@@ -56,6 +56,8 @@
         <property name="sessionManager" ref="defaultWebSessionManager"/>
         <!-- shiro cache manager -->
         <property name="cacheManager" ref="redisCacheManager"/>
+        <!-- shiro cookie manager -->
+        <property name="rememberMeManager" ref="cookieRememberMeManager"/>
     </bean>
 
     <!-- Relam -->
@@ -88,4 +90,16 @@
 
     <!-- shiro cache-->
     <bean id="redisCacheManager" class="top.by.xs.cache.RedisCacheManager"></bean>
+
+
+    <!-- shiro自动登录 -->
+    <bean id="cookieRememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cookie" ref="cookie"/>
+    </bean>
+
+    <bean id="cookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <!-- cookie存活时间，单位是秒 -->
+        <property name="maxAge" value="600"/>
+    </bean>
 </beans>
